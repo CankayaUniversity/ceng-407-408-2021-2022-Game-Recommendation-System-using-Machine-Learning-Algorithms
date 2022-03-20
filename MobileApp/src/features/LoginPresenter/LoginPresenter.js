@@ -1,15 +1,15 @@
 import React from "react";
 import { TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-import { RoundedButton } from "../../Utils/RoundedButton";
+import { SquareButton } from "../../Utils/SquareButton";
 
 export const Login = () => (
     <View style={styles.view}>
         <TextInput label="UserName/E-Mail"></TextInput>
         <TextInput label="Password" secureTextEntry></TextInput>
         <View style={styles.button}>
-            <RoundedButton title="Sign-up" />
-            <RoundedButton title="Login" />
+            <SquareButton title="Sign-up" size={80}/>
+            <SquareButton title="Login" size={80}/>
         </View>
     </View>
 )

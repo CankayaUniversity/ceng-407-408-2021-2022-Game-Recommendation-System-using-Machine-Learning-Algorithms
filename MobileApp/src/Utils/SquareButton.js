@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export const RoundedButton = ({
+export const SquareButton = ({
     style = {},
     textStyle = {},
     size = 100,
@@ -16,7 +16,7 @@ export const RoundedButton = ({
 
 const styles = (size) => ({
     radius: {
-        borderRadius: size / 2,
+        borderWidth: size / 2,
         width: size,
         height: size,
         alignItems: 'center',

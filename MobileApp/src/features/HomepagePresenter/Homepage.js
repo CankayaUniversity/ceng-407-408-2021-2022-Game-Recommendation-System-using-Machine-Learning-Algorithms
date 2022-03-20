@@ -8,7 +8,7 @@ import { Homepageitems } from "./Homepageitems";
 export const Homepage = () => {
     return (
         <View style={styles.view}>
-            <Searchbar
+            <Searchbar placeholder="Search Games"
             />
             <Homepageitems></Homepageitems>
         </View>

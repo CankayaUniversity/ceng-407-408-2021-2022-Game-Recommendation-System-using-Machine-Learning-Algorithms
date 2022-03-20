@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    backgroundColor: "#00bcd4",
+    backgroundColor: "#ff0000",
   },
 });
