@@ -14,9 +14,20 @@ from generic_preprocessing import *
 
 ratings = pd.read_csv('./final_dataset1.csv')
 print(ratings.head())
+X = ratings.iloc[:, :-1]
+y = ratings.iloc[:, -1]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 interactions = create_interaction_matrix(df=ratings,
                                          user_col='user_id',
                                          item_col='appid',
+                                         rating_col='rating')
+interactions1 = create_interaction_matrix(df=X_train,
+                                         user_col='user_id',
+                                         item_col='name',
+                                         rating_col='rating')
+interactions2 = create_interaction_matrix(df=X_test,
+                                         user_col='user_id',
+                                         item_col='name',
                                          rating_col='rating')
 print(interactions.head())
 
@@ -26,13 +37,8 @@ user_dict = create_user_dict(interactions=interactions)
 movies_dict = create_item_dict(df=ratings,
                                id_col='appid',
                                name_col='name')
-X = ratings.iloc[:, :-1]
-y = ratings.iloc[:, -1]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-print(X_train)
-print(y_train)
 
-mf_model = runMF(interactions=interactions,
+mf_model = runMF(interactions=interactions1,
                  n_components=30,
                  loss='warp',
                  epoch=30,
