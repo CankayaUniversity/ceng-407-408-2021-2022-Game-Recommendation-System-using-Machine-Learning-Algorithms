@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "recosystem-58070",
+  "private_key_id": "d67587e198baf7a593c0579c19f5d5228cf4167e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFmFbkPjSiT20e\n1iRtbplvvbdqnVgQU+9eHdNRGyQcKfyRRZMDlKBQC5y8bpvBgMDtse8gX00Gu3Vk\naujAjDNSHyuwzV5lYGJo9LGmqkdN8KeGnserXS1HIuAQcUlLr9HqnJjT0ItDL7RD\nVQpQfUBYoYLUXetOn31aMwBq3bfoiBvjfolyRaiWvxaPeVBCr6oj5QMK3i7GRkCt\n6SrYpW/SbdLosbLYlOI2qjMWS0FGkNwdNbtgEIBsZUfjuEYQJfzorK0oUBe3hLqO\n6W9IPhnkBAqjQuMrTP2AKdZSZz9cprSuTPmYJvSMa2RaDRMKV5f6R5HQQXjQegDd\nt3GAuf4jAgMBAAECggEAGtd4QPEiUpovh0ItGKCEP2WqMNVxomYvMhMjIvVo5lqI\ncMOJa7HDmpwOjUUJQN6uAUbBO8iLvMpiRriEfa44moNEJXRVymJZe/XMMYkYE+0J\nFNnPjeZ5FsdqC1HC/yvB0aO22a85URsoha0GWwC+E6F9FZQx5DBOOvPgA/mygz0c\n9Ud5XAr2G6VMtjQCgTMVopItXZVLKsgw2AFB7pF06+n/MiQbOX9iz1GaShxGTtZK\nS3mJLbxpF4GwqHJnUI1k9ZeTmjSjkf7Apw9bdSyHQsrIkhT0rJT/EZ0EIpJaNnHq\n+E/d82W1YD7OTo9eISbZhbIAYh2NOFv0+jxtHGdKwQKBgQDn1kA4UUE2GgSd0tDe\nprMZqCaqEBR+X+GltI+GiPN+BNWka00+mto8a5LaX7rNxmap4zk0ESpP/hyGc5fB\nKzXxurivOZ+Y837ypXAQTXNV4aMeIJLLMLMBdtE3tR2FnqRkS/PYgIDAJw5SocgJ\n4Z0zaB0ECW8K+5klVccuduHViwKBgQDaMHdKs59bo1Do5b0DJ1jiN1lv4DfR6E8v\nCija855d/8ZoV35fEcEKqpEIF1a8kKJSsEWgDw4FOS3fx9bCOxtdBwWh8MC9JZIl\ncwBfWQiYtDhW60aATDgIzjj6B7oApjvwAi9jU+Re76cbr/pxi6guTapSTptkHWKG\nd4bYFS58yQKBgDHgCtLS0DemY0Xcu6iarj8fyKmfaflCAVZXwOTNg6yht6B2oRiN\n0dNbxS0LmTF5tE5qHr1P0A2DenmGVqhs9l75r4+q0uXhxHbJFpG7R8u7Dg+GLG5g\nHLJ88EeOxDohxfX5zQzPoGM2Q8ONIG7XxazwggWDTgtL00eP65jYZH8/AoGBAI6r\n/nVEe0HKyw9fmnbDdeWGV99F+HoztAOIWyrA/p9srupvu9yimV5GJkvqJvdqhBoZ\n1Y1SCtLzjsGzxQSA7eWov9Aiw4VrWeNPDcFLUMm5ntWHRzSBompvnuYvwzrFeI/6\nfc4vfzds8hKywcsZjUGp22Oyrv2KEXDoG66UOy+xAoGAOMLoTLfnVkOqUcbVfL+W\n1TLLAC1/IRLvFqBRKnfFXrivA96kudcvY/h3BxIBj0S9VbFvHzvQ6Usd76UEV42f\nWflQSO9l+sd52ifof/oEKVFnJIitGmByc6a4kva1Rb9j54gJ1weNddzYONWo5r5j\njqq+3i3+4hVrBa31KMUIS/s=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-dysol@recosystem-58070.iam.gserviceaccount.com",
+  "client_id": "107000986380224317527",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dysol%40recosystem-58070.iam.gserviceaccount.com"
+}
