@@ -14,12 +14,23 @@ from generic_preprocessing import *
 
 
 ratings = pd.read_csv('./final_dataset1.csv')
-print(ratings.head())
+# print(ratings.head())
+X = ratings.iloc[:, :-1]
+y = ratings.iloc[:, -1]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 interactions = create_interaction_matrix(df = ratings,
                                          user_col = 'user_id',
                                          item_col = 'appid',
                                          rating_col = 'rating')
-print(interactions.head())
+interactions1 = create_interaction_matrix(df = X_train,
+                                         user_col = 'user_id',
+                                         item_col = 'name',
+                                         rating_col = 'rating')
+interactions2 = create_interaction_matrix(df = X_test,
+                                         user_col = 'user_id',
+                                         item_col = 'name',
+                                         rating_col = 'rating')
+# print(interactions1.head())
 
 # Create User Dict
 user_dict = create_user_dict(interactions=interactions)
@@ -27,27 +38,25 @@ user_dict = create_user_dict(interactions=interactions)
 movies_dict = create_item_dict(df = ratings,
                                id_col = 'appid',
                                name_col = 'name')
-X = ratings.iloc[:, :-1]
-y = ratings.iloc[:, -1]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-print(X_train)
-print(y_train)
 
-mf_model = runMF(interactions = interactions,
+print(X_test.tail(50))
+# print(y_train)
+
+mf_model = runMF(interactions = interactions1,
                  n_components = 30,
-                 loss = 'warp',
+                 loss = 'bpr',
                  epoch = 30,
                  n_jobs = 4)
 print(mf_model)
 rec_list = sample_recommendation_user(model = mf_model,
                                       interactions = interactions,
-                                      user_id = 14153959,
+                                      user_id = 16084897,
                                       user_dict = user_dict,
                                       item_dict = movies_dict,
                                       threshold = 0,
                                       nrec_items = 10,
                                       show = True)
-print(rec_list)
+# print(rec_list)
 
 # games = pd.read_csv('H:\PycharmProjects\pythonProject\steam-200k.csv')
 # games.head()
