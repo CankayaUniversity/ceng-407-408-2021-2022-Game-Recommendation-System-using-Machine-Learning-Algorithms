@@ -1,4 +1,4 @@
 from Recommendation import *
 
-def get_rec(user_id, item_count):
-    return Recommendation.get_recommendations(14153959, 10)
+def get_rec(user_id, liked_games):
+    return Recommendation.get_recommendations(user_id, liked_games)
