@@ -45,7 +45,7 @@ def register():
             # TODO evaluate recommendations and send it to db
             return 'succes', 200
         except:
-            return 'bad request', 400-
+            return 'bad request', 400
     pass
 
 

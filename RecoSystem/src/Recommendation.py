@@ -53,7 +53,7 @@ class Recommendation(ABC):
     #                                       nrec_items=10,
     #                                       show=True)
     @abstractmethod
-    def get_recommendations(self, user_id, item_count):
+    def get_recommendations(self, user_id, liked_games):
         pass
         rec_to_send = sample_recommendation_user(model=self.mf_model,
                                                  interactions=self.interactions,
@@ -61,6 +61,25 @@ class Recommendation(ABC):
                                                  user_dict=self.user_dict,
                                                  item_dict=self.game_dict,
                                                  threshold=0,
-                                                 nrec_items=item_count,
+                                                 nrec_items=25,
                                                  show=True)
+
+        name_set = {}
+        rating_set = {}
+        for x,y in liked_games.items():                                 #making seperate sets of dictionary
+            name_set.add(x)
+            rating_set.add(y)
+            appid_of_GivenGameName = self.ratings[self.ratings['name'] == x]['appid']    #to get appid of the given name
+            # liked_games.update({"user_id": user_id})
+
+        userToLikedGames = {                                            #making dict to dataframe to write it on csv
+          'user_id': [user_id],
+          'name': [x],
+          'rating': [y],
+          'appid': [appid_of_GivenGameName]
+         }
+
+        userToLikedGames.to_csv('./final_dataset1.csv', mode='a', index=False, header=False)
+
+
         return rec_to_send
