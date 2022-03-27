@@ -1,10 +1,12 @@
-import logging
 import os
 
 from flask import Flask, jsonify, request
 import firebase
 import pyrebase
 from config import config
+
+# from src.Main import get_rec
+# from src.Main import *
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
@@ -29,33 +31,38 @@ def login_user(email, password):
 
 @app.route('/register', methods=['POST'])
 def register():
-    email = request.form["email"]
-    password = request.form["password"]
-    liked_games = request.form["liked-games"]
-    try:
-        user = register_user(email, password)
-        # TODO evaluate recommendations and send it to db
-    except:
-        logging.warning("E-Mail Exists")
+    if request.method == 'POST':
+        print("asd")
+        email = request.json['email']
+        password = request.json['password']
+        print("email = ", email, '\n', "password =", password)
+
+        # liked_games = request.form["liked-games"]
+        try:
+            user = register_user(email, password)
+            # recommendations = get_rec(user["uid"], liked_games)
+            # database yaz
+            # TODO evaluate recommendations and send it to db
+            return 'succes', 200
+        except:
+            return 'bad request', 400-
     pass
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    email = request.form["email"]
-    password = request.form["password"]
-    try:
-        user = login_user(email, password)
-    #     TODO get recommended games and send it to db
-    #     get_liked_games(user_id)
-    # get_recommendation()
-    except:
-        logging.error("E-Mail Or Password is Wrong")
-    pass
-
-
-@app.route('/get_list', methods=['GET'])
-def get_recommendation():
+    if request.method == "POST":
+        email = request.json["email"]
+        password = request.json["password"]
+        try:
+            user = login_user(email, password)
+            #     TODO get recommended games and send it to db
+            #     get_liked_games(user_id)
+            # databaseden oyunlari çek
+            # get_recommendation()
+            return "Succes", 200
+        except:
+            return "Bad request", 400
     pass
 
 

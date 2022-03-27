@@ -8,7 +8,7 @@ export const SquareButton = ({
     ...props
 }) => {
     return (
-        <TouchableOpacity style={[styles(size).radius, style]} onPress={props.onPress}>
+        <TouchableOpacity activeOpacity={0.5} style={[styles(size).radius, style]} onPress={props.onPress}>
             <Text style={[styles(size).text, textStyle]}>{props.title}</Text>
         </TouchableOpacity>
     );

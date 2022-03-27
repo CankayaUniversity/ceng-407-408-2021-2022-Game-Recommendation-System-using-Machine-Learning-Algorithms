@@ -18,7 +18,7 @@ export const Homepageitems = ({ games = {} }) => {
     return (
         <TouchableOpacity activeOpacity={0.8}>
             <Card elevation={5} style={styles.card}>
-                <Card.Cover key={name} style={styles.cover} source={{ uri: photo[0] }} />
+                <Card.Cover key={name} style={styles.cover} />
                 <Text style={styles.title}>{name}</Text>
                 <View style={styles.rating}>
                     {ratingArray.map(item => (
