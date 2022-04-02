@@ -7,7 +7,6 @@ import ratingStars from "../../../assets/ratingStars";
 export const Homepageitems = ({ games = {} }) => {
     const {
         name = "Some Game",
-        photo = ["http://www.tto.cankaya.edu.tr/wp-content/uploads/2013/11/logo.png"],
         rating = "5",
     } = games;
 

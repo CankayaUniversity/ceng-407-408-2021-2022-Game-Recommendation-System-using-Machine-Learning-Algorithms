@@ -17,14 +17,14 @@ export const Register = ({ navigation }) => {
       alert("Passwords do not match!");
       return;
     }
-    if (!email) {
+    if (email == null) {
       alert("Email cannot be empty.");
       return;
-    } if (!password) {
+    } if (password == null) {
       alert("Please enter your password.");
       return;
     }
-    if (!retypedPassword) {
+    if (retypedPassword == null) {
       alert("Please re-enter your password.");
       return;
     }
@@ -45,8 +45,8 @@ export const Register = ({ navigation }) => {
 
 
     if((await response).ok) {
-      console.log("Response Worked")
-      navigation.navigate("Homepage");
+      console.log("Succesfully Registered")
+      navigation.navigate("UserLikedGames");
     } else {
       alert("Email already exists");
     }

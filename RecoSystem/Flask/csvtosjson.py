@@ -1,17 +1,10 @@
-import csv
-import json
+import pandas as pd
+csv_path = "games_dataset.csv"
 
-csv_path = "C:\\Users\\User\\Desktop\\final_dataset1.csv"
-json_path = "userData.json"
 
-data = {}
-i = 0
-with open(csv_path) as csvF:
-    csvReader = csv.DictReader(csvF)
-    for rows in csvReader:
-        data[i] = rows
-        i += 1
+def csv_to_json(csv_path):
+    df = pd.read_csv(csv_path)
 
-jsonF = open("userData.json", 'w')
-
-jsonF.write(json.dumps(data, indent=4))
+    col = df.to_json()
+    return col
+    pass

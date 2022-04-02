@@ -34,7 +34,7 @@ export const Login = ({ navigation }) => {
         })
 
         if ((await response).ok) {
-            console.log("Response Worked")
+            console.log("Succesfully Logined")
             navigation.navigate("Homepage");
         } else {
             alert("User not found");

@@ -1,11 +1,13 @@
+import json
 import os
 
 from flask import Flask, jsonify, request
 import firebase
 import pyrebase
+
+from Flask.csvtosjson import csv_to_json
 from config import config
 
-# from src.Main import get_rec
 # from src.Main import *
 
 firebase = pyrebase.initialize_app(config)
@@ -36,7 +38,6 @@ def register():
         email = request.json['email']
         password = request.json['password']
         print("email = ", email, '\n', "password =", password)
-
         # liked_games = request.form["liked-games"]
         try:
             user = register_user(email, password)
@@ -63,6 +64,20 @@ def login():
             return "Succes", 200
         except:
             return "Bad request", 400
+    pass
+
+
+@app.route('/games', methods=['GET', 'POST'])
+def games():
+    if request.method == "GET":
+        games = csv_to_json("games_dataset.csv")
+        return games
+    elif request.method == "POST":
+        liked_games_list = request.json["likedGamesList"]
+        if not liked_games_list:
+            return "Empty", 400
+
+        return "Succes", 200
     pass
 
 
