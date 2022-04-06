@@ -74,6 +74,7 @@ def games():
         return games
     elif request.method == "POST":
         liked_games_list = request.json["likedGamesList"]
+        print(liked_games_list)
         if not liked_games_list:
             return "Empty", 400
 
