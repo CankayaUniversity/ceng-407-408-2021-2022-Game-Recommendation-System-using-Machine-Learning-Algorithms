@@ -1,7 +1,7 @@
 import json
 import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 import firebase
 import pyrebase
 
@@ -9,12 +9,18 @@ from Flask.csvtosjson import csv_to_json
 from config import config
 
 # from src.Main import *
+from src.Main import get_rec
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 db = firebase.database()
 
 app = Flask(__name__)
+
+games = {}
+global user, recommended_games
+
+recommended_games = get_rec(user_id=14153959, item_count=10)
 
 
 def register_user(email, password):
@@ -41,9 +47,6 @@ def register():
         # liked_games = request.form["liked-games"]
         try:
             user = register_user(email, password)
-            # recommendations = get_rec(user["uid"], liked_games)
-            # database yaz
-            # TODO evaluate recommendations and send it to db
             return 'succes', 200
         except:
             return 'bad request', 400
@@ -56,15 +59,13 @@ def login():
         email = request.json["email"]
         password = request.json["password"]
         try:
-            user = login_user(email, password)
-            #     TODO get recommended games and send it to db
-            #     get_liked_games(user_id)
-            # databaseden oyunlari çek
-            # get_recommendation()
+            session["user"] = login_user(email, password)
             return "Succes", 200
         except:
             return "Bad request", 400
-    pass
+    elif request.method == "GET":
+        session["recommended_games"] = get_rec(user["localId"], games)
+        return jsonify(session["recommended_games"])
 
 
 @app.route('/games', methods=['GET', 'POST'])
@@ -74,7 +75,7 @@ def games():
         return games
     elif request.method == "POST":
         liked_games_list = request.json["likedGamesList"]
-        print(liked_games_list)
+
         if not liked_games_list:
             return "Empty", 400
 
