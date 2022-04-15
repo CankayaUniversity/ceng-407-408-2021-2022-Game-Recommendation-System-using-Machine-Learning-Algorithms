@@ -2,6 +2,7 @@ import json
 import os
 
 from flask import Flask, jsonify, request, session
+from flask_session import Session
 import firebase
 import pyrebase
 
@@ -17,11 +18,12 @@ db = firebase.database()
 
 app = Flask(__name__)
 
-games = {}
 global user, recommended_games
 
-recommended_games = get_rec(user_id=14153959, item_count=10)
-
+dict = {"final fantasy viii": 5, "stranded deep": 4}
+app.config['SESSION_TYPE'] = 'memcached'
+app.config['SECRET_KEY'] = 'super secret key'
+sess = Session()
 
 def register_user(email, password):
     email = email
@@ -44,9 +46,8 @@ def register():
         email = request.json['email']
         password = request.json['password']
         print("email = ", email, '\n', "password =", password)
-        # liked_games = request.form["liked-games"]
         try:
-            user = register_user(email, password)
+            session["user"] = register_user(email, password)
             return 'succes', 200
         except:
             return 'bad request', 400
@@ -64,7 +65,8 @@ def login():
         except:
             return "Bad request", 400
     elif request.method == "GET":
-        session["recommended_games"] = get_rec(user["localId"], games)
+        # session["recommended_games"] = get_rec(session["user"]["localId"], session["liked_games_list"])
+        session["recommended_games"] = get_rec(user_id=14153959, item_count=session["liked_games_list"])
         return jsonify(session["recommended_games"])
 
 
@@ -74,9 +76,9 @@ def games():
         games = csv_to_json("games_dataset.csv")
         return games
     elif request.method == "POST":
-        liked_games_list = request.json["likedGamesList"]
+        session["liked_games_list"] = request.json["likedGamesList"]
 
-        if not liked_games_list:
+        if not session["liked_games_list"]:
             return "Empty", 400
 
         return "Succes", 200
@@ -86,3 +88,4 @@ def games():
 port = int(os.environ.get('PORT', 3000))
 if __name__ == '__main__':
     app.run(threaded=True, host='0.0.0.0', port=port)
+
