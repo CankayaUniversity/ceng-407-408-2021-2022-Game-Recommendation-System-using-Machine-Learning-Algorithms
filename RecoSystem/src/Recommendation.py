@@ -69,6 +69,7 @@ def get_recommendations(user_id, liked_games):
         'rating': [y],
         'appid': [appid_of_GivenGameName]
     }
+    pd.DataFrame.from_dict(userToLikedGames)
 
     userToLikedGames.to_csv('./final_dataset1.csv', mode='a', index=False, header=False)
 
