@@ -4,7 +4,7 @@ from src.generic_preprocessing import *
 # import matplotlib.pyplot as plt
 from src.recsys import *
 
-ratings = pd.read_csv('D:\\dev\\PROJECTS\\ceng-407-408-2021-2022-Game-Recommendation-System-using-Machine-Learning-Algorithms\RecoSystem\\src\\final_dataset1.csv')  # reading dataset
+ratings = pd.read_csv('..\\src\\final_dataset1.csv')  # reading dataset
 
 X = ratings.iloc[:, :-1]
 y = ratings.iloc[:, -1]
@@ -46,15 +46,6 @@ mf_model = runMF(interactions=interactions1,
 #                                       show=True)
 
 def get_recommendations(user_id, liked_games):
-    rec_to_send = sample_recommendation_user(model=mf_model,
-                                             interactions=interactions,
-                                             user_id=user_id,
-                                             user_dict=user_dict,
-                                             item_dict=game_dict,
-                                             threshold=0,
-                                             nrec_items=25,
-                                             show=True)
-
     name_set = []
     rating_set = []
     for x, y in liked_games.items():  # making seperate sets of dictionary
@@ -67,10 +58,24 @@ def get_recommendations(user_id, liked_games):
         'user_id': [user_id],
         'name': [x],
         'rating': [y],
-        'appid': [appid_of_GivenGameName]
+        'appid': [appid_of_GivenGameName.get(0)]
     }
-    pd.DataFrame.from_dict(userToLikedGames)
+    userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 
-    userToLikedGames.to_csv('./final_dataset1.csv', mode='a', index=False, header=False)
+    # userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False)
+
+    rec_to_send = sample_recommendation_user(model=mf_model,
+                                             interactions=interactions,
+                                             user_id=user_id,
+                                             user_dict=user_dict,
+                                             item_dict=game_dict,
+                                             threshold=0,
+                                             # nrec_items=25,
+                                             show=True)
+    print(rec_to_send)
+    # for a in rec_to_send:  # making seperate sets of dictionary
+    #     appid_of_GivenGameNam = ratings[ratings['appid'] == a]['name']  # to get appid of the given name
+    #     appid_of_GivenGameNam.drop_duplicates()
+
 
     return rec_to_send

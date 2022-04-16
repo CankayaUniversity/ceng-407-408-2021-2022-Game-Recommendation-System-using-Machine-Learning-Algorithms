@@ -6,6 +6,7 @@ import { Login } from './LoginPresenter/LoginPresenter';
 import { Register } from './RegisterPresenter/Register';
 import { Homepage } from './HomepagePresenter/Homepage';
 import { UserLikedGames } from './RegisterPresenter/UserLikedGames';
+import { Recommendations } from './Recommendations/Recommendations';
 
 
 const { Navigator, Screen } = createStackNavigator();
@@ -14,11 +15,12 @@ const AppNavigator = () => {
 
     return (
         <NavigationContainer >
-            <Navigator headerShown="false" initialRouteName='UserLikedGames'>
+            <Navigator headerShown="false" initialRouteName='Login'>
                 <Screen styles={styles.container} name="Login" component={Login}></Screen>
                 <Screen name="Register" component={Register}></Screen>
                 <Screen name="Homepage" component={Homepage}></Screen>
                 <Screen name="UserLikedGames" component={UserLikedGames}></Screen>
+                <Screen name="Recommendations" component={Recommendations}></Screen>
             </Navigator>
         </NavigationContainer>
     )

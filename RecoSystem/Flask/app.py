@@ -9,7 +9,6 @@ import pyrebase
 from Flask.csvtosjson import csv_to_json
 from config import config
 
-# from src.Main import *
 from src.Main import get_rec
 
 firebase = pyrebase.initialize_app(config)
@@ -20,10 +19,10 @@ app = Flask(__name__)
 
 global user, recommended_games
 
-dict = {"final fantasy viii": 5, "stranded deep": 4}
 app.config['SESSION_TYPE'] = 'memcached'
 app.config['SECRET_KEY'] = 'super secret key'
 sess = Session()
+
 
 def register_user(email, password):
     email = email
@@ -65,9 +64,10 @@ def login():
         except:
             return "Bad request", 400
     elif request.method == "GET":
+        # databesden final dataseti güncelle
         # session["recommended_games"] = get_rec(session["user"]["localId"], session["liked_games_list"])
-        session["recommended_games"] = get_rec(user_id=14153959, item_count=session["liked_games_list"])
-        return jsonify(session["recommended_games"])
+        # değişiklileri dbye yaz
+        return jsonify(results=get_rec(user_id=1533333, item_count={"warhammer 40000 dawn of war  soulstorm": 3}))
 
 
 @app.route('/games', methods=['GET', 'POST'])
@@ -88,4 +88,3 @@ def games():
 port = int(os.environ.get('PORT', 3000))
 if __name__ == '__main__':
     app.run(threaded=True, host='0.0.0.0', port=port)
-

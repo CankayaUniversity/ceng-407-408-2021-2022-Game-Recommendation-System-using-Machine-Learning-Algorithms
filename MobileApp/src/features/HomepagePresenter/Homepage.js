@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { Homepageitems } from "./Homepageitems";
+import { SquareButton } from '../../Utils/SquareButton';
 
 
+export const Homepage = ({navigation}) => {
 
-export const Homepage = () => {
+    function navigatoToRecommendation() {
+        navigation.navigate("Recommendations");
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.view}>
-                <Searchbar placeholder="Search Games"
-                />
-                <Homepageitems></Homepageitems>
-            </View>
+            <SquareButton onPress={navigatoToRecommendation} />
         </View>
     )
 }
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#ff0000",
-      },
+    },
     view: {
         padding: 20,
         paddingTop: 50,

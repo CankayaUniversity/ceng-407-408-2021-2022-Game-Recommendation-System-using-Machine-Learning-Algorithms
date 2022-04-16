@@ -125,7 +125,7 @@ def sample_recommendation_user(model, interactions, user_id, user_dict,
         for i in scores:
             print(str(counter) + '- ' + i)
             counter += 1
-    return return_score_list
+    return scores
 
 
 def sample_recommendation_item(model, interactions, item_id, user_dict, item_dict, number_of_user):
