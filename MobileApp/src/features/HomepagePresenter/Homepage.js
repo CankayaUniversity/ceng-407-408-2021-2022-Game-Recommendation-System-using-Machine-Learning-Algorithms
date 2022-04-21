@@ -5,7 +5,7 @@ import { Homepageitems } from "./Homepageitems";
 import { SquareButton } from '../../Utils/SquareButton';
 
 
-export const Homepage = ({navigation}) => {
+export const Homepage = ({ navigation }) => {
 
     function navigatoToRecommendation() {
         navigation.navigate("Recommendations");
@@ -13,7 +13,7 @@ export const Homepage = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <SquareButton onPress={navigatoToRecommendation} />
+            <SquareButton onPress={navigatoToRecommendation} title={"Recommendations"} />
         </View>
     )
 }

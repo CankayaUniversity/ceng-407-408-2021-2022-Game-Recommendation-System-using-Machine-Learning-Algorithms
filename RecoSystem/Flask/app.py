@@ -41,7 +41,6 @@ def login_user(email, password):
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
-        print("asd")
         email = request.json['email']
         password = request.json['password']
         print("email = ", email, '\n', "password =", password)
@@ -64,10 +63,12 @@ def login():
         except:
             return "Bad request", 400
     elif request.method == "GET":
+        # TODO
         # databesden final dataseti güncelle
-        # session["recommended_games"] = get_rec(session["user"]["localId"], session["liked_games_list"])
+        session["recommended_games"] = get_rec(session["user"]["localId"], session["liked_games_list"])
         # değişiklileri dbye yaz
-        return jsonify(results=get_rec(user_id=1533333, item_count={"warhammer 40000 dawn of war  soulstorm": 3}))
+        # return jsonify(results=get_rec(user_id=1533333, item_count={"warhammer 40000 dawn of war  soulstorm": 3}))
+        return jsonify(session["recommended_games"])
 
 
 @app.route('/games', methods=['GET', 'POST'])
