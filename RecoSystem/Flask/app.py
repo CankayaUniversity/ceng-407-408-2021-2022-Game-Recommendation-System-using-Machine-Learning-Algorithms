@@ -9,7 +9,7 @@ import pyrebase
 from Flask.csvtosjson import csv_to_json
 from config import config
 
-from src.Main import get_rec
+from src.Main import *
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
@@ -85,6 +85,10 @@ def games():
         return "Succes", 200
     pass
 
+@app.route('/gettop10', methods=['GET'])
+def gettopN():
+    top10 = get_topN(10)
+    return top10
 
 port = int(os.environ.get('PORT', 3000))
 if __name__ == '__main__':
