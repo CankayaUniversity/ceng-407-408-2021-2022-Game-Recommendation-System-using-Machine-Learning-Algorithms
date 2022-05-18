@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
-
 # import matplotlib.pyplot as plt
 from src.recsys import *
+import pandas as pd
 
 ratings = pd.read_csv('..\\src\\final_dataset1.csv')  # reading dataset
 
@@ -44,24 +44,62 @@ mf_model = runMF(interactions=interactions1,
 #                                       nrec_items=10,
 #                                       show=True)
 
+
 def get_recommendations(user_id, liked_games):
+
     name_set = []
     rating_set = []
-    for x, y in liked_games.items():  # making seperate sets of dictionary
-        name_set.append(x)
-        rating_set.append(y)
-        appid_of_GivenGameName = ratings[ratings['name'] == x]['appid']  # to get appid of the given name
-        # liked_games.update({"user_id": user_id})
+    user_set= []
+    app_set = []
+    games_updated = []
+
+    user_df = ratings.loc[ratings['user_id'] == user_id]
+    user_known_games_df = user_df['name']
+    user_known_games = user_known_games_df.values   #user's previous rated games name in dataset
+    user_known_games_rating_df = user_df['rating']
+
+    game_len = len(user_known_games_df)
+    for a in range(0,game_len):         #2 times
+        for x in range(0,len(liked_games)):     #4times
+            liked_games_name = liked_games.get('name')      #coming names
+            liked_games_rating = liked_games.get('rating')  #coming ratings
+            if user_known_games_df.values[a] == liked_games_name[x]:    #datasetteki her oyun ismini gelenle karsılastır
+
+                if str(user_known_games_rating_df.values[a])!=liked_games_rating[x]:    #eger isimler eşitse ratingleri karşılastır. ratingler eşit degilse updatele
+                    user_known_games_rating_df.values[a]=liked_games_rating[x]
+
+                    row = user_df.index[user_df['name'] == liked_games_name[x]]     #oyunun eşit oldugu rowun sayısı
+                    row_in_ratings = ratings.loc[row[0]]                            #that row
+                    row_in_ratings['rating']=liked_games_rating[x]                  #ratingi değiştir
+                    ratings.loc[row[0]] = row_in_ratings                            #rowa geri yaz
+                    games_updated.append(user_known_games_df.values[a])
+                    ratings.to_csv('..\\src\\final_dataset1.csv', mode='w', index=False, header=True, sep=',', quoting=False)
+
+
+    counter = 0 #counter for rating index
+    for x in liked_games.get('name'):  # making seperate sets of dictionary
+        flag=0
+        rating_to_write = liked_games['rating']
+        for y in user_known_games:
+            if x==y:                # if game names are equal do not write to csv
+                flag=1
+        if flag==0:
+            name_set.append(x)
+            rating_set.append(rating_to_write[counter])
+            appid_of_GivenGameName = ratings.loc[ratings['name'] == x]['appid'].values[0]  # appid of game
+            user_set.append(user_id)
+            app_set.append(appid_of_GivenGameName)
+        counter +=1
 
     userToLikedGames = {  # making dict to dataframe to write it on csv
-        'user_id': [user_id],
-        'name': [x],
-        'rating': [y],
-        'appid': [appid_of_GivenGameName.get(0)]
+        'user_id': user_set,
+        'name': name_set,
+        'rating': rating_set,
+        'appid': app_set
     }
     userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 
-    # userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False)
+    userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',', quoting=False)
 
     rec_to_send = sample_recommendation_user(model=mf_model,
                                              interactions=interactions,
@@ -72,9 +110,5 @@ def get_recommendations(user_id, liked_games):
                                              # nrec_items=25,
                                              show=True)
     print(rec_to_send)
-    # for a in rec_to_send:  # making seperate sets of dictionary
-    #     appid_of_GivenGameNam = ratings[ratings['appid'] == a]['name']  # to get appid of the given name
-    #     appid_of_GivenGameNam.drop_duplicates()
-
 
     return rec_to_send
