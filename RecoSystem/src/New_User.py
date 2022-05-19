@@ -9,11 +9,14 @@ def check_if_new_user(user_id):
         new_user_flag=1
     return new_user_flag
 
-def write_to_csv(user_id, liked_games):
+def write_to_csv(user_id, liked_games,age,gender):
     name_set = []
     rating_set = []
     user_set= []
     app_set = []
+    age_set = []
+    gender_set = []
+
 
     counter = 0         # counter for rating index
     for x in liked_games.get('name'):  # making separate sets of dictionary
@@ -24,13 +27,17 @@ def write_to_csv(user_id, liked_games):
         appid_of_GivenGameName = ratings.loc[ratings['name'] == x]['appid'].values[0]  # app id of game
         user_set.append(user_id)
         app_set.append(appid_of_GivenGameName)
+        age_set.append(age)
+        gender_set.append(gender)
         counter +=1
 
     userToLikedGames = {  # making dict to dataframe to write it on csv
         'user_id': user_set,
         'name': name_set,
         'rating': rating_set,
-        'appid': app_set
+        'appid': app_set,
+        'age': age_set,
+        'gender': gender_set
     }
     userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 

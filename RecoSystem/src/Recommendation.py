@@ -21,6 +21,14 @@ interactions2 = create_interaction_matrix(df=X_test,
                                           user_col='user_id',
                                           item_col='name',
                                           rating_col='rating')
+age_interactions = create_interaction_matrix(df=ratings,
+                                             user_col='user_id',
+                                             item_col='name',
+                                             rating_col='age')
+# gender_interactions = create_interaction_matrix(df=X_train,
+#                                           user_col='user_id',
+#                                           item_col='name',
+#                                           rating_col='gender')
 
 user_dict = create_user_dict(interactions=interactions)
 
@@ -28,11 +36,15 @@ game_dict = create_item_dict(df=ratings,
                              id_col='appid',
                              name_col='name')
 
-mf_model = runMF(interactions=interactions1,
+#y = sparse.csr_matrix(age_interactions.values)
+mf_model = runMF(interactions=interactions,
                  n_components=30,
                  loss='warp',
                  epoch=30,
-                 n_jobs=4)
+                 n_jobs=4,
+                 #item_features=y,
+                 #user_features=y
+                 )
 
 
 # rec_list = sample_recommendation_user(model=mf_model,
@@ -45,13 +57,15 @@ mf_model = runMF(interactions=interactions1,
 #                                       show=True)
 
 
-def get_recommendations(user_id, liked_games):
+def get_recommendations(user_id, liked_games,age,gender):
 
     name_set = []
     rating_set = []
     user_set= []
     app_set = []
     games_updated = []
+    age_set = []
+    gender_set = []
 
     user_df = ratings.loc[ratings['user_id'] == user_id]
     user_known_games_df = user_df['name']
@@ -60,7 +74,7 @@ def get_recommendations(user_id, liked_games):
 
     game_len = len(user_known_games_df)
     for a in range(0,game_len):         #2 times
-        for x in range(0,len(liked_games)):     #4times
+        for x in range(0,len(liked_games['name'])):     #4times
             liked_games_name = liked_games.get('name')      #coming names
             liked_games_rating = liked_games.get('rating')  #coming ratings
             if user_known_games_df.values[a] == liked_games_name[x]:    #datasetteki her oyun ismini gelenle karsılastır
@@ -89,17 +103,39 @@ def get_recommendations(user_id, liked_games):
             appid_of_GivenGameName = ratings.loc[ratings['name'] == x]['appid'].values[0]  # appid of game
             user_set.append(user_id)
             app_set.append(appid_of_GivenGameName)
+            age_set.append(age)
+            gender_set.append(gender)
         counter +=1
 
     userToLikedGames = {  # making dict to dataframe to write it on csv
         'user_id': user_set,
         'name': name_set,
         'rating': rating_set,
-        'appid': app_set
+        'appid': app_set,
+        'age': age_set,
+        'gender': gender_set
     }
     userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 
     userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',', quoting=False)
+
+
+    mf_model_age = runMF(interactions=age_interactions,
+                     n_components=30,
+                     loss='warp',
+                     epoch=30,
+                     n_jobs=4)
+    # mf_model = runMF(interactions=interactions1,
+    #                  n_components=30,
+    #                  loss='warp',
+    #                  epoch=30,
+    #                  n_jobs=4)
+    age_dict = create_item_dict(df=ratings,
+                                 id_col='user_id',
+                                 name_col='age')
+    gender_dict = create_item_dict(df=ratings,
+                                 id_col='user_id',
+                                 name_col='gender')
 
     rec_to_send = sample_recommendation_user(model=mf_model,
                                              interactions=interactions,
@@ -107,7 +143,17 @@ def get_recommendations(user_id, liked_games):
                                              user_dict=user_dict,
                                              item_dict=game_dict,
                                              threshold=0,
-                                             # nrec_items=25,
+                                             #nrec_items=,
+                                             show=True)
+    print(rec_to_send)
+
+    rec_to_send = sample_recommendation_user(model=mf_model_age,
+                                             interactions=interactions,
+                                             user_id=user_id,
+                                             user_dict=user_dict,
+                                             item_dict=game_dict,
+                                             threshold=0,
+                                             nrec_items=5,
                                              show=True)
     print(rec_to_send)
 

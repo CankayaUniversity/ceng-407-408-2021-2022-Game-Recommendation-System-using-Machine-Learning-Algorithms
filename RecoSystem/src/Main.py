@@ -3,21 +3,22 @@ from pandas import read_csv
 from collections import Counter
 
 thisdict = {
-    "name": ["star wars republic commando", "the escapists", "the ship", "stranded deep"],
-    "rating": ["5", "3", "2", "1"]
+    "name": ["call of duty modern warfare 2", "call of duty ghosts", "call of duty 4 modern warfare"],
+    "rating": ["5", "5", "5"],
 }
-new_user = check_if_new_user(user_id=111)
+userid=1112
+new_user = check_if_new_user(user_id=userid)
 if new_user == 1:
-    write_to_csv(user_id=111, liked_games=thisdict)
+    write_to_csv(user_id=userid, liked_games=thisdict,age=18,gender='male')
 
 from src.Recommendation import get_recommendations
 
 
-def get_rec(user_id, user_liked_games):
-    return get_recommendations(user_id=user_id, liked_games=user_liked_games)
+def get_rec(user_id, user_liked_games,age,gender):
+    return get_recommendations(user_id=user_id, liked_games=user_liked_games,age=age,gender=gender)
 
 
-get_rec(111, thisdict)
+get_rec(userid, thisdict,18,'male')
 
 
 def get_topN(n):
