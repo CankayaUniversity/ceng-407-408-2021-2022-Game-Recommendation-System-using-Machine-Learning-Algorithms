@@ -3,7 +3,7 @@ import os
 
 from flask import Flask, jsonify, request, session
 from flask_session import Session
-import firebase
+# import firebase
 import pyrebase
 
 from Flask.csvtosjson import csv_to_json

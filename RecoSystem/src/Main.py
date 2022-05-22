@@ -12,11 +12,14 @@ if new_user == 1:
     write_to_csv(user_id=userid, liked_games=thisdict,age=18,gender='male')
 
 from src.Recommendation import get_recommendations
-
+from pandas import read_csv
+from collections import Counter
 
 def get_rec(user_id, user_liked_games,age,gender):
     return get_recommendations(user_id=user_id, liked_games=user_liked_games,age=age,gender=gender)
 
+def get_top10(name):
+    c = Counter(name)
 
 get_rec(userid, thisdict,18,'male')
 
