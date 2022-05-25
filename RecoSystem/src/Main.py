@@ -6,7 +6,7 @@ thisdict = {
     "name": ["call of duty modern warfare 2", "call of duty ghosts", "call of duty 4 modern warfare"],
     "rating": ["5", "5", "5"],
 }
-userid=1112
+userid=111
 new_user = check_if_new_user(user_id=userid)
 if new_user == 1:
     write_to_csv(user_id=userid, liked_games=thisdict,age=18,gender='male')
