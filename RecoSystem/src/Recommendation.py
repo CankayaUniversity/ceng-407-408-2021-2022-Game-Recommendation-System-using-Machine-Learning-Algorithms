@@ -13,11 +13,11 @@ interactions = create_interaction_matrix(df=ratings,
                                          user_col='user_id',
                                          item_col='appid',
                                          rating_col='rating')
-interactions1 = create_interaction_matrix(df=X_train,
+train_interactions = create_interaction_matrix(df=X_train,
                                           user_col='user_id',
                                           item_col='name',
                                           rating_col='rating')
-interactions2 = create_interaction_matrix(df=X_test,
+test_interactions = create_interaction_matrix(df=X_test,
                                           user_col='user_id',
                                           item_col='name',
                                           rating_col='rating')
@@ -42,20 +42,9 @@ mf_model = runMF(interactions=interactions,
                  loss='warp',
                  epoch=30,
                  n_jobs=4,
-                 #item_features=y,
+                 #item_features=y,          # Use here if you want to use lightfm version of age including
                  #user_features=y
                  )
-
-
-# rec_list = sample_recommendation_user(model=mf_model,
-#                                       interactions=interactions,
-#                                       user_id=14153959,
-#                                       user_dict=user_dict,
-#                                       item_dict=game_dict,
-#                                       threshold=0,
-#                                       nrec_items=10,
-#                                       show=True)
-
 
 def get_recommendations(user_id, liked_games,age,gender):
 
@@ -87,7 +76,7 @@ def get_recommendations(user_id, liked_games,age,gender):
                     row_in_ratings['rating']=liked_games_rating[x]                  #ratingi değiştir
                     ratings.loc[row[0]] = row_in_ratings                            #rowa geri yaz
                     games_updated.append(user_known_games_df.values[a])
-                    ratings.to_csv('..\\src\\final_dataset1.csv', mode='w', index=False, header=True, sep=',', quoting=False)
+                    ratings.to_csv('..\\src\\final_dataset1.csv', mode='w', index=False, header=True, sep=',', quoting=False)       #find a better way to write updates
 
 
     counter = 0 #counter for rating index
@@ -125,7 +114,7 @@ def get_recommendations(user_id, liked_games,age,gender):
                      loss='warp',
                      epoch=30,
                      n_jobs=4)
-    # mf_model = runMF(interactions=interactions1,
+    # mf_model = runMF(interactions=train_interactions,
     #                  n_components=30,
     #                  loss='warp',
     #                  epoch=30,
@@ -147,7 +136,7 @@ def get_recommendations(user_id, liked_games,age,gender):
                                              show=True)
     print(rec_to_send)
 
-    rec_to_send = sample_recommendation_user(model=mf_model_age,
+    rec_to_send_age = sample_recommendation_user(model=mf_model_age,
                                              interactions=interactions,
                                              user_id=user_id,
                                              user_dict=user_dict,
@@ -156,5 +145,6 @@ def get_recommendations(user_id, liked_games,age,gender):
                                              nrec_items=5,
                                              show=True)
     print(rec_to_send)
+    print(rec_to_send_age)
 
     return rec_to_send
