@@ -102,9 +102,8 @@ def games():
 @app.route('/gettopn', methods=['GET'])
 def gettopN():
     top10 = get_topN(10)
-    print(type(top10))
-    print(top10)
-    return top10
+
+    return jsonify(top10)
 
 
 port = int(os.environ.get('PORT', 3000))

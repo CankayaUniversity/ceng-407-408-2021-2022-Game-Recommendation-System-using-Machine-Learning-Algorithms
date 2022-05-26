@@ -47,10 +47,8 @@ export const Homepage = ({ navigation }) => {
           onPress={() => {
             Alert.alert(
               "",
-              
-              dict[gameName]["description"] +
-                "\n\n" +
-                dict[gameName]["link"]
+
+              dict[gameName]["description"] + "\n\n" + dict[gameName]["link"]
             );
           }}
         >
@@ -76,9 +74,8 @@ export const Homepage = ({ navigation }) => {
         onPress={navigatoToRecommendation}
         title={"Recommendations"}
       />
-
+      <Text style={styles.text}>Top 10 Popular Games</Text>
       <ScrollView>
-        <Text style={styles.text}>Top 10 Popular Games</Text>
         {isLoading ? <ActivityIndicator /> : <View>{list()}</View>}
       </ScrollView>
     </View>
@@ -105,5 +102,11 @@ const styles = StyleSheet.create({
   rating: {
     flexDirection: "row",
   },
-  text: { padding: 15, color: "white", fontSize: 20, alignContent:"center", justifyContent:"center"},
+  text: {
+    padding: 15,
+    color: "white",
+    fontSize: 20,
+    alignContent: "center",
+    justifyContent: "center",
+  },
 });
