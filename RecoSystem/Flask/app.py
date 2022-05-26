@@ -35,6 +35,7 @@ def login_user(email, password):
     email = email
     password = password
     user = auth.sign_in_with_email_and_password(email=email, password=password)
+    print("Logined user id: ", user["localId"])
     return user
 
 
@@ -66,7 +67,8 @@ def login():
         except:
             return "Bad request", 400
     elif request.method == "GET":
-        session["recommended_games"] = get_rec(user_id=str(session["user"]["localId"]), user_liked_games=session["liked_games_list"],
+        session["recommended_games"] = get_rec(user_id=str(session["user"]["localId"]),
+                                               user_liked_games=session["liked_games_list"],
                                                age=session["age"], gender=session["gender"])
         return jsonify(session["recommended_games"])
 
@@ -97,9 +99,11 @@ def games():
     pass
 
 
-@app.route('/gettop10', methods=['GET'])
+@app.route('/gettopn', methods=['GET'])
 def gettopN():
     top10 = get_topN(10)
+    print(type(top10))
+    print(top10)
     return top10
 
 

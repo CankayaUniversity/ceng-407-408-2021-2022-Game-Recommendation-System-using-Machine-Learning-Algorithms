@@ -16,7 +16,8 @@ def write_to_csv(user_id, liked_games,age,gender):
     app_set = []
     age_set = []
     gender_set = []
-
+    if not liked_games:
+        return
 
     counter = 0         # counter for rating index
     for x in liked_games.get('name'):  # making separate sets of dictionary

@@ -163,4 +163,9 @@ const styles = StyleSheet.create({
   rating: {
     flexDirection: "row",
   },
+  cover: { padding: 20, backgroundColor: "white" },
+  title: { padding: 16 },
+  rating: {
+    flexDirection: "row",
+  },
 });

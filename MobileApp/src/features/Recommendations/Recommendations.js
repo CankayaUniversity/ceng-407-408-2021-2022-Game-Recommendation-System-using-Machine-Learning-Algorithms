@@ -7,7 +7,6 @@ import {
   Text,
   ScrollView,
   Alert,
-  Linking,
 } from "react-native";
 import { Rating } from "react-native-ratings";
 import { Card, List } from "react-native-paper";
@@ -62,9 +61,11 @@ export const Recommendations = ({ navigation }) => {
           onPress={() => {
             Alert.alert(
               "",
-              dict[gameName]["description"] +
+              (
+                dict[gameName]["image"] +
+                dict[gameName]["description"] +
                 "\n\n" +
-                dict[gameName]["description"]
+                dict[gameName]["description"])
             );
           }}
         >
