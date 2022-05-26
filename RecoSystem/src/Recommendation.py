@@ -86,54 +86,55 @@ def get_recommendations(user_id, liked_games, age, gender):
     user_known_games = user_known_games_df.values  # user's previous rated games name in dataset
     user_known_games_rating_df = user_df['rating']
 
-    game_len = len(user_known_games_df)
-    for a in range(0, game_len):  # 2 times
-        for x in range(0, len(liked_games['name'])):  # 4times
-            liked_games_name = liked_games.get('name')  # coming names
-            liked_games_rating = liked_games.get('rating')  # coming ratings
-            if user_known_games_df.values[a] == liked_games_name[x]:  # datasetteki her oyun ismini gelenle karsılastır
+    if liked_games:
+        game_len = len(user_known_games_df)
+        for a in range(0, game_len):  # 2 times
+            for x in range(0, len(liked_games['name'])):  # 4times
+                liked_games_name = liked_games.get('name')  # coming names
+                liked_games_rating = liked_games.get('rating')  # coming ratings
+                if user_known_games_df.values[a] == liked_games_name[x]:  # datasetteki her oyun ismini gelenle karsılastır
 
-                if str(user_known_games_rating_df.values[a]) != liked_games_rating[
-                    x]:  # eger isimler eşitse ratingleri karşılastır. ratingler eşit degilse updatele
-                    user_known_games_rating_df.values[a] = liked_games_rating[x]
+                    if str(user_known_games_rating_df.values[a]) != liked_games_rating[
+                        x]:  # eger isimler eşitse ratingleri karşılastır. ratingler eşit degilse updatele
+                        user_known_games_rating_df.values[a] = liked_games_rating[x]
 
-                    row = user_df.index[user_df['name'] == liked_games_name[x]]  # oyunun eşit oldugu rowun sayısı
-                    row_in_ratings = ratings.loc[row[0]]  # that row
-                    row_in_ratings['rating'] = liked_games_rating[x]  # ratingi değiştir
-                    ratings.loc[row[0]] = row_in_ratings  # rowa geri yaz
-                    games_updated.append(user_known_games_df.values[a])
-                    ratings.to_csv('..\\src\\final_dataset1.csv', mode='w', index=False, header=True, sep=',',
-                                   quoting=False)  # find a better way to write updates
+                        row = user_df.index[user_df['name'] == liked_games_name[x]]  # oyunun eşit oldugu rowun sayısı
+                        row_in_ratings = ratings.loc[row[0]]  # that row
+                        row_in_ratings['rating'] = liked_games_rating[x]  # ratingi değiştir
+                        ratings.loc[row[0]] = row_in_ratings  # rowa geri yaz
+                        games_updated.append(user_known_games_df.values[a])
+                        ratings.to_csv('..\\src\\final_dataset1.csv', mode='w', index=False, header=True, sep=',',
+                                       quoting=False)  # find a better way to write updates
 
+    if liked_games:
+        counter = 0  # counter for rating index
+        for x in liked_games.get('name'):  # making seperate sets of dictionary
+            flag = 0
+            rating_to_write = liked_games['rating']
+            for y in user_known_games:
+                if x == y:  # if game names are equal do not write to csv
+                    flag = 1
+            if flag == 0:
+                name_set.append(x)
+                rating_set.append(rating_to_write[counter])
+                appid_of_GivenGameName = ratings.loc[ratings['name'] == x]['appid'].values[0]  # appid of game
+                user_set.append(user_id)
+                app_set.append(appid_of_GivenGameName)
+                age_set.append(age)
+                gender_set.append(gender)
+            counter += 1
 
-    counter = 0  # counter for rating index
-    for x in liked_games.get('name'):  # making seperate sets of dictionary
-        flag = 0
-        rating_to_write = liked_games['rating']
-        for y in user_known_games:
-            if x == y:  # if game names are equal do not write to csv
-                flag = 1
-        if flag == 0:
-            name_set.append(x)
-            rating_set.append(rating_to_write[counter])
-            appid_of_GivenGameName = ratings.loc[ratings['name'] == x]['appid'].values[0]  # appid of game
-            user_set.append(user_id)
-            app_set.append(appid_of_GivenGameName)
-            age_set.append(age)
-            gender_set.append(gender)
-        counter += 1
+        userToLikedGames = {  # making dict to dataframe to write it on csv
+            'user_id': user_set,
+            'name': name_set,
+            'rating': rating_set,
+            'appid': app_set,
+            'age': age_set,
+            'gender': gender_set
+        }
+        userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 
-    userToLikedGames = {  # making dict to dataframe to write it on csv
-        'user_id': user_set,
-        'name': name_set,
-        'rating': rating_set,
-        'appid': app_set,
-        'age': age_set,
-        'gender': gender_set
-    }
-    userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
-
-    userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',', quoting=False)
+        userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',', quoting=False)
 
     mf_model_age = runMF(interactions=age_interactions,
                          n_components=30,
@@ -170,7 +171,6 @@ def get_recommendations(user_id, liked_games, age, gender):
                                                  threshold=0,
                                                  nrec_items=5,
                                                  show=True)
-    print(rec_to_send)
     print(rec_to_send_age)
 
     return rec_to_send
