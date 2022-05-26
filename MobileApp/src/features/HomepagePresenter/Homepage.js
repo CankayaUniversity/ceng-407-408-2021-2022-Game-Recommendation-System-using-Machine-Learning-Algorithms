@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
-import { Homepageitems } from "./Homepageitems";
 import { SquareButton } from '../../Utils/SquareButton';
 
 
 export const Homepage = ({ navigation }) => {
-
+    
     function navigatoToRecommendation() {
         navigation.navigate("Recommendations");
     }

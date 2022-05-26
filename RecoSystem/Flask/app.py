@@ -43,6 +43,8 @@ def register():
     if request.method == 'POST':
         email = request.json['email']
         password = request.json['password']
+        session["age"] = request.json['age']
+        session["gender"] = request.json['gender']
         print("email = ", email, '\n', "password =", password)
         try:
             session["user"] = register_user(email, password)
@@ -57,17 +59,15 @@ def login():
     if request.method == "POST":
         email = request.json["email"]
         password = request.json["password"]
+        session["liked_games_list"] = {}
         try:
             session["user"] = login_user(email, password)
             return "Succes", 200
         except:
             return "Bad request", 400
     elif request.method == "GET":
-        # TODO
-        # databesden final dataseti güncelle
-        session["recommended_games"] = get_rec(session["user"]["localId"], session["liked_games_list"])
-        # değişiklileri dbye yaz
-        # return jsonify(results=get_rec(user_id=1533333, item_count={"warhammer 40000 dawn of war  soulstorm": 3}))
+        session["recommended_games"] = get_rec(user_id=str(session["user"]["localId"]), user_liked_games=session["liked_games_list"],
+                                               age=session["age"], gender=session["gender"])
         return jsonify(session["recommended_games"])
 
 
@@ -75,9 +75,20 @@ def login():
 def games():
     if request.method == "GET":
         games = csv_to_json("games_dataset.csv")
-        return games
+        return jsonify(games)
     elif request.method == "POST":
         session["liked_games_list"] = request.json["likedGamesList"]
+        new_dict = {}
+        name = []
+        rating = []
+        for key, value in session["liked_games_list"].items():
+            name.append(key)
+            rating.append(value)
+
+        new_dict["name"] = name
+        new_dict["rating"] = rating
+
+        session["liked_games_list"] = new_dict
 
         if not session["liked_games_list"]:
             return "Empty", 400
@@ -85,10 +96,12 @@ def games():
         return "Succes", 200
     pass
 
+
 @app.route('/gettop10', methods=['GET'])
 def gettopN():
     top10 = get_topN(10)
     return top10
+
 
 port = int(os.environ.get('PORT', 3000))
 if __name__ == '__main__':

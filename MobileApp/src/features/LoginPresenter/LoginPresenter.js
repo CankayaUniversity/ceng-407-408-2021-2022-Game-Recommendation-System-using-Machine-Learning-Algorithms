@@ -20,7 +20,7 @@ export const Login = ({ navigation }) => {
             alert("Please specify 6 character password");
         }
 
-        const response = fetch("http://192.168.1.43:3000/login", {
+        const response = fetch("http://192.168.1.44:3000/login", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

@@ -3,10 +3,16 @@ import { View, StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 import { SquareButton } from "../../Utils/SquareButton";
 
+import { Picker } from '@react-native-picker/picker';
+
 export const Register = ({ navigation }) => {
   const [email, setEmail] = useState(null);
+  const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [retypedPassword, setRetypedPassword] = useState(null);
+  const [age, setAge] = useState(null);
+  const [gender, setGender] = useState(null);
+  
 
   async function register() {
     if (String(password).length < 6) {
@@ -29,8 +35,9 @@ export const Register = ({ navigation }) => {
       return;
     }
 
+    console.log(gender);
 
-    const response = fetch("http://192.168.1.43:3000/register", {
+    const response = fetch("http://192.168.1.44:3000/register", {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -38,13 +45,16 @@ export const Register = ({ navigation }) => {
       },
       body: JSON.stringify({
         "email": String(email),
-        "password": String(password)
+        "username": String(username),
+        "password": String(password),
+        "age": String(age),
+        "gender": String(gender)
       })
 
     })
 
 
-    if((await response).ok) {
+    if ((await response).ok) {
       console.log("Succesfully Registered")
       navigation.navigate("UserLikedGames");
     } else {
@@ -59,8 +69,18 @@ export const Register = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.view}>
         <TextInput onChangeText={setEmail} label="E-mail" autoComplete="email" />
+        <TextInput onChangeText={setUsername} label="Username" />
         <TextInput onChangeText={setPassword} label="Password" secureTextEntry />
         <TextInput onChangeText={setRetypedPassword} label="Re-type Password" secureTextEntry />
+        <TextInput onChangeText={setAge} label="Age" keyboardType='numeric' />
+        <Picker
+         selectedValue={gender}
+          style={{ alignContent:"center", height: 50, width: 150, backgroundColor:"white" }}
+          onValueChange={setGender}>
+          <Picker.Item label="Male" value="m" />
+          <Picker.Item label="Female" value="f" />
+        </Picker>
+
 
         <View style={styles.button}>
           <SquareButton onPress={register} title="Register" size={80} />
@@ -77,7 +97,7 @@ const styles = StyleSheet.create({
   view: {
     padding: 20,
     paddingTop: 50,
-    flex: 0.5,
+    flex: 0.8,
     flexDirection: "column",
     justifyContent: "space-between"
   },

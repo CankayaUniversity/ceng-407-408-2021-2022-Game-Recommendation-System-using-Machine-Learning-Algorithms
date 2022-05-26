@@ -3,10 +3,10 @@ import pandas as pd
 ratings = pd.read_csv('..\\src\\final_dataset1.csv')  # reading dataset
 
 def check_if_new_user(user_id):
-    new_user_flag = 0
+    new_user_flag = False
     user_df = ratings.loc[ratings['user_id'] == user_id]
     if user_df.empty:
-        new_user_flag=1
+        new_user_flag=True
     return new_user_flag
 
 def write_to_csv(user_id, liked_games,age,gender):
