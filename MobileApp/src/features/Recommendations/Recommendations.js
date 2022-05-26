@@ -61,11 +61,7 @@ export const Recommendations = ({ navigation }) => {
           onPress={() => {
             Alert.alert(
               "",
-              (
-                dict[gameName]["image"] +
-                dict[gameName]["description"] +
-                "\n\n" +
-                dict[gameName]["description"])
+              dict[gameName]["description"] + "\n\n" + dict[gameName]["link"]
             );
           }}
         >

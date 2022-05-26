@@ -34,6 +34,7 @@ def register_user(email, password):
 def login_user(email, password):
     email = email
     password = password
+
     user = auth.sign_in_with_email_and_password(email=email, password=password)
     print("Logined user id: ", user["localId"])
     return user
