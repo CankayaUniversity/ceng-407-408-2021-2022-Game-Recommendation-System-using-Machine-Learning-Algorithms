@@ -1,7 +1,9 @@
 from src.New_User import *
 from pandas import read_csv
 from collections import Counter
-
+from src.Recommendation import get_recommendations
+from pandas import read_csv
+from collections import Counter
 
 # thisdict = {
 #     "name": ["call of duty modern warfare 2", "call of duty ghosts", "call of duty 4 modern warfare"],
@@ -19,9 +21,7 @@ def check_user(user_id, user_liked_games, age, gender):
             write_to_csv(user_id=user_id, liked_games=user_liked_games, age=age, gender=gender)
 
 
-from src.Recommendation import get_recommendations
-from pandas import read_csv
-from collections import Counter
+
 
 
 def get_rec(user_id, user_liked_games, age, gender):

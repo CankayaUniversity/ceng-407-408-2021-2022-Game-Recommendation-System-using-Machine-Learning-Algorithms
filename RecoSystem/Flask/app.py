@@ -9,7 +9,7 @@ import pyrebase
 from Flask.csvtosjson import csv_to_json
 from config import config
 
-from src.Main import *
+from src.Main import get_rec, get_topN, check_user
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
@@ -67,6 +67,11 @@ def login():
         except:
             return "Bad request", 400
     elif request.method == "GET":
+        print(session["user"]["localId"], session["liked_games_list"], session["age"], session["gender"])
+
+        check_user(user_id=str(session["user"]["localId"]),
+                   user_liked_games=session["liked_games_list"],
+                   age=session["age"], gender=session["gender"])
         session["recommended_games"] = get_rec(user_id=str(session["user"]["localId"]),
                                                user_liked_games=session["liked_games_list"],
                                                age=session["age"], gender=session["gender"])

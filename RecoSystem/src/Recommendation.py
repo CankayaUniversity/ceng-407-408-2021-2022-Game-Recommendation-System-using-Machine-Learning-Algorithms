@@ -6,73 +6,71 @@ from lightfm.evaluation import precision_at_k
 from lightfm.evaluation import auc_score
 from lightfm.cross_validation import random_train_test_split
 
-ratings = pd.read_csv('..\\src\\final_dataset1.csv')  # reading dataset
-
-X = ratings.iloc[:, :-1]
-y = ratings.iloc[:, -1]
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)  # dataset %20test %80train
-
-
-interactions = create_interaction_matrix(df=ratings,
-                                         user_col='user_id',
-                                         item_col='appid',
-                                         rating_col='rating')
-csr_interactions = sparse.csr_matrix(interactions.values)
-X_train, X_test = random_train_test_split(interactions=csr_interactions, test_percentage=0.2, random_state=None)
-
-# train_interactions = create_interaction_matrix(df=X_train,
-#                                           user_col='user_id',
-#                                           item_col='name',
-#                                           rating_col='rating')
-# test_interactions = create_interaction_matrix(df=X_test,
-#                                           user_col='user_id',
-#                                           item_col='name',
-#                                           rating_col='rating')
-age_interactions = create_interaction_matrix(df=ratings,
-                                             user_col='user_id',
-                                             item_col='name',
-                                             rating_col='age')
-# gender_interactions = create_interaction_matrix(df=X_train,
-#                                           user_col='user_id',
-#                                           item_col='name',
-#                                           rating_col='gender')
-
-user_dict = create_user_dict(interactions=interactions)
-
-game_dict = create_item_dict(df=ratings,
-                             id_col='appid',
-                             name_col='name')
-
-# y = sparse.csr_matrix(age_interactions.values)
-mf_model = runMF(interactions=interactions,
-                 n_components=30,
-                 loss='warp',
-                 epoch=30,
-                 n_jobs=4,
-                 # item_features=y,          # Use here if you want to use lightfm version of age including
-                 # user_features=y
-                 )
-
-mf_model_for_evaluate = runMF_for_evaluate(interactions=X_train,
-                                           n_components=30,
-                                           loss='warp',
-                                           epoch=30,
-                                           n_jobs=4,
-                                           # item_features=y,          # Use here if you want to use lightfm version of age including
-                                           # user_features=y
-                                           )
-
-train_precision = precision_at_k(mf_model_for_evaluate, X_train, k=15).mean()
-test_precision = precision_at_k(mf_model_for_evaluate, X_test, k=15).mean()
-
-train_auc = auc_score(mf_model_for_evaluate, X_train).mean()
-test_auc = auc_score(mf_model_for_evaluate, X_test).mean()
-print('Collaborative filtering test AUC: %s' % train_precision)
-print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
-print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
-
 
 def get_recommendations(user_id, liked_games, age, gender):
+    ratings = pd.read_csv('..\\src\\final_dataset1.csv')  # reading dataset
+
+    X = ratings.iloc[:, :-1]
+    y = ratings.iloc[:, -1]
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)  # dataset %20test %80train
+
+    interactions = create_interaction_matrix(df=ratings,
+                                             user_col='user_id',
+                                             item_col='appid',
+                                             rating_col='rating')
+    csr_interactions = sparse.csr_matrix(interactions.values)
+    X_train, X_test = random_train_test_split(interactions=csr_interactions, test_percentage=0.2, random_state=None)
+
+    # train_interactions = create_interaction_matrix(df=X_train,
+    #                                           user_col='user_id',
+    #                                           item_col='name',
+    #                                           rating_col='rating')
+    # test_interactions = create_interaction_matrix(df=X_test,
+    #                                           user_col='user_id',
+    #                                           item_col='name',
+    #                                           rating_col='rating')
+    age_interactions = create_interaction_matrix(df=ratings,
+                                                 user_col='user_id',
+                                                 item_col='name',
+                                                 rating_col='age')
+    # gender_interactions = create_interaction_matrix(df=X_train,
+    #                                           user_col='user_id',
+    #                                           item_col='name',
+    #                                           rating_col='gender')
+
+    user_dict = create_user_dict(interactions=interactions)
+
+    game_dict = create_item_dict(df=ratings,
+                                 id_col='appid',
+                                 name_col='name')
+
+    # y = sparse.csr_matrix(age_interactions.values)
+    mf_model = runMF(interactions=interactions,
+                     n_components=30,
+                     loss='warp',
+                     epoch=30,
+                     n_jobs=4,
+                     # item_features=y,          # Use here if you want to use lightfm version of age including
+                     # user_features=y
+                     )
+
+    mf_model_for_evaluate = runMF_for_evaluate(interactions=X_train,
+                                               n_components=30,
+                                               loss='warp',
+                                               epoch=30,
+                                               n_jobs=4,
+                                               # item_features=y,          # Use here if you want to use lightfm version of age including
+                                               # user_features=y
+                                               )
+
+    train_precision = precision_at_k(mf_model_for_evaluate, X_train, k=15).mean()
+    test_precision = precision_at_k(mf_model_for_evaluate, X_test, k=15).mean()
+
+    train_auc = auc_score(mf_model_for_evaluate, X_train).mean()
+    test_auc = auc_score(mf_model_for_evaluate, X_test).mean()
+    print('Collaborative filtering test AUC: %s' % train_precision)
+    print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
+    print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
     name_set = []
     rating_set = []
     user_set = []
@@ -92,7 +90,8 @@ def get_recommendations(user_id, liked_games, age, gender):
             for x in range(0, len(liked_games['name'])):  # 4times
                 liked_games_name = liked_games.get('name')  # coming names
                 liked_games_rating = liked_games.get('rating')  # coming ratings
-                if user_known_games_df.values[a] == liked_games_name[x]:  # datasetteki her oyun ismini gelenle karsılastır
+                if user_known_games_df.values[a] == liked_games_name[
+                    x]:  # datasetteki her oyun ismini gelenle karsılastır
 
                     if str(user_known_games_rating_df.values[a]) != liked_games_rating[
                         x]:  # eger isimler eşitse ratingleri karşılastır. ratingler eşit degilse updatele
@@ -134,7 +133,8 @@ def get_recommendations(user_id, liked_games, age, gender):
         }
         userToLikedGames = pd.DataFrame.from_dict(userToLikedGames)
 
-        userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',', quoting=False)
+        userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',',
+                                quoting=False)
 
     mf_model_age = runMF(interactions=age_interactions,
                          n_components=30,
