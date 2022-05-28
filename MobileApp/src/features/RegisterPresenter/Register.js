@@ -11,7 +11,7 @@ export const Register = ({ navigation }) => {
   const [password, setPassword] = useState(null);
   const [retypedPassword, setRetypedPassword] = useState(null);
   const [age, setAge] = useState(null);
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState("m");
   
 
   async function register() {
