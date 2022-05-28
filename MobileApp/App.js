@@ -49,11 +49,4 @@ export default function App() {
         <AppNavigator></AppNavigator>
     </SafeAreaView>
   );
-  function App() {
-    return (
-      <div className="App">
-        <SearchBar placeholder="Enter a Book Name..." data={BookData} />
-      </div>
-    );
-  }
 }

@@ -8,18 +8,39 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { Rating } from "react-native-ratings";
-import { Card, List } from "react-native-paper";
+import { Card, List, Searchbar } from "react-native-paper";
 import { SquareButton } from "../../Utils/SquareButton";
 import "../RegisterPresenter/UserLikedGames";
 import { getGamesDict } from "../../Utils/Utils";
 import Modal from "react-native-modal";
+
 export const Homepage = ({ navigation }) => {
   [isLoading, setLoading] = useState(true);
   [gamesList, setGamesList] = useState([]);
+  [isSearched, setSearched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  [searchList, setSearchList] = useState([]);
   dict = getGamesDict();
-  function navigatoToRecommendation() {
+
+  const onChangeSearch = (query) => {
+    setLoading(true);
+    setSearchQuery(query);
+    handleSearchedList();
+  };
+  
+  function navigateToRecommendation() {
     navigation.navigate("Recommendations");
+  }
+
+  function handleSearchedList() {
+    searchList = [];
+    for(const [key, value] of Object.entries(dict)) {
+      if (key.search(searchQuery) != -1) {
+        searchList.push(key);
+      }
+    }
+    setSearchList(searchList);
+    setLoading(false);
   }
 
   const getArticlesFromApi = async () => {
@@ -38,8 +59,38 @@ export const Homepage = ({ navigation }) => {
       });
   };
 
-  const list = () => {
+  const showSearchedList = () => {
+    return searchList.map((gameName) => {
+      return (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          key={gameName + "searched"}
+          onPress={() => {
+            Alert.alert(
+              "",
+
+              dict[gameName]["description"] + "\n\n" + dict[gameName]["link"]
+            );
+          }}
+        >
+          <Card elevation={5} style={styles.card} key={gameName + "searched"}>
+            <Card.Cover
+              key={gameName + "searched"}
+              style={styles.cover}
+              source={{ uri: dict[gameName]["image"] }}
+            />
+            <Text style={styles.title}>{gameName}</Text>
+          </Card>
+        </TouchableOpacity>
+      );
+      
+    });
+    
+  };
+
+  const showList = () => {
     return gamesList.map((gameName) => {
+      
       return (
         <TouchableOpacity
           activeOpacity={0.8}
@@ -68,15 +119,27 @@ export const Homepage = ({ navigation }) => {
   useEffect(() => {
     getArticlesFromApi();
   }, []);
+
   return (
     <View style={styles.container}>
+      <Searchbar
+        placeholder="Search"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+      />
       <SquareButton
-        onPress={navigatoToRecommendation}
+        onPress={navigateToRecommendation}
         title={"Recommendations"}
       />
       <Text style={styles.text}>Top 10 Popular Games</Text>
       <ScrollView>
-        {isLoading ? <ActivityIndicator /> : <View>{list()}</View>}
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : searchQuery == "" ? (
+          <View>{showList()}</View>
+        ) : (
+          <View>{showSearchedList()}</View>
+        )}
       </ScrollView>
     </View>
   );
