@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Rating } from "react-native-ratings";
-import { Card, List } from "react-native-paper";
+import { Card, List, Searchbar} from "react-native-paper";
 import { SquareButton } from "../../Utils/SquareButton";
 import {setGamesDict, getGamesDict} from "../../Utils/Utils.js"
 
@@ -23,10 +23,29 @@ export const UserLikedGames = ({ navigation }) => {
   const [gamesImageList, setGamesImageList] = useState([]);
   const [gamesDescriptionList, setDescriptionImageList] = useState([]);
   const [gamesLinkList, setGamesLinkList] = useState([]);
-
+  [isSearched, setSearched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  [searchList, setSearchList] = useState([]);
+  dict = getGamesDict();
   var likedGamesList = new Map();
 
+  const onChangeSearch = (query) => {
+    setLoading(true);
+    setSearchQuery(query);
+    handleSearchedList();
+  };
   
+
+  function handleSearchedList() {
+    searchList = [];
+    for(const [key, value] of Object.entries(dict)) {
+      if (key.search(searchQuery) != -1) {
+        searchList.push(key);
+      }
+    }
+    setSearchList(searchList);
+    setLoading(false);
+  }
 
   function ratingAdded(rating, gameName) {
     likedGamesList.set(gameName, rating);
@@ -98,7 +117,33 @@ export const UserLikedGames = ({ navigation }) => {
     getArticlesFromApi();
   }, []);
 
-  const list = () => {
+  const showSearhcedList = () =>{
+    return searchList.map((gameName) => {
+      return (
+        <TouchableOpacity activeOpacity={0.8} key={gameName}>
+          <Card elevation={5} style={styles.card} key={gameName}>
+            <Card.Cover
+              key={gameName}
+              style={styles.cover}
+              source={{ uri: dict[gameName]["image"] }}
+            />
+            <Text style={styles.title}>{gameName}</Text>
+            <View style={styles.rating}>
+              <Rating
+                defaultRating={0}
+                onFinishRating={(rating) => {
+                  ratingAdded(rating, gameName);
+                }}
+                fractions={0}
+              ></Rating>
+            </View>
+          </Card>
+        </TouchableOpacity>
+      );
+    });
+  };
+
+  const showGameList = () => {
     var i = -1;
     return gamesNameList.map((gameName) => {
       i++;
@@ -128,6 +173,11 @@ export const UserLikedGames = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Searchbar
+        placeholder="Search"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+      />
       <View style={styles.button}>
         <SquareButton
           title="✓"
@@ -136,7 +186,7 @@ export const UserLikedGames = ({ navigation }) => {
         ></SquareButton>
       </View>
       <ScrollView>
-        {isLoading ? <ActivityIndicator /> : <View>{list()}</View>}
+        {isLoading ? <ActivityIndicator /> : searchQuery==""? <View>{showGameList()}</View>: <View>{showSearhcedList()}</View>}
       </ScrollView>
     </View>
   );
