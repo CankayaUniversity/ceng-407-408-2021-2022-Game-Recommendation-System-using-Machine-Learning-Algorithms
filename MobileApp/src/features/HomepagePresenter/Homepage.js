@@ -35,7 +35,7 @@ export const Homepage = ({ navigation }) => {
   function handleSearchedList() {
     searchList = [];
     for(const [key, value] of Object.entries(dict)) {
-      if (key.search(searchQuery) != -1) {
+      if (key.toLowerCase().search(searchQuery.toLowerCase()) != -1) {
         searchList.push(key);
       }
     }

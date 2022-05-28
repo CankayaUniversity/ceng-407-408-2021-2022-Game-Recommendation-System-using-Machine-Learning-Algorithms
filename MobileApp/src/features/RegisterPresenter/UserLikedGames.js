@@ -8,13 +8,9 @@ import {
   ScrollView,
 } from "react-native";
 import { Rating } from "react-native-ratings";
-import { Card, List, Searchbar} from "react-native-paper";
+import { Card, List, Searchbar } from "react-native-paper";
 import { SquareButton } from "../../Utils/SquareButton";
-import {setGamesDict, getGamesDict} from "../../Utils/Utils.js"
-
-const gamesDict = {};
-
-
+import { setGamesDict, getGamesDict } from "../../Utils/Utils.js";
 
 export const UserLikedGames = ({ navigation }) => {
   let games = [];
@@ -34,12 +30,11 @@ export const UserLikedGames = ({ navigation }) => {
     setSearchQuery(query);
     handleSearchedList();
   };
-  
 
   function handleSearchedList() {
     searchList = [];
-    for(const [key, value] of Object.entries(dict)) {
-      if (key.search(searchQuery) != -1) {
+    for (const [key, value] of Object.entries(dict)) {
+      if (key.toLowerCase().search(searchQuery.toLowerCase()) != -1) {
         searchList.push(key);
       }
     }
@@ -51,8 +46,6 @@ export const UserLikedGames = ({ navigation }) => {
     likedGamesList.set(gameName, rating);
     console.log(likedGamesList);
   }
-
-  
 
   const getArticlesFromApi = async () => {
     fetch("http://192.168.1.44:3000/games")
@@ -117,7 +110,7 @@ export const UserLikedGames = ({ navigation }) => {
     getArticlesFromApi();
   }, []);
 
-  const showSearhcedList = () =>{
+  const showSearhcedList = () => {
     return searchList.map((gameName) => {
       return (
         <TouchableOpacity activeOpacity={0.8} key={gameName}>
@@ -186,7 +179,13 @@ export const UserLikedGames = ({ navigation }) => {
         ></SquareButton>
       </View>
       <ScrollView>
-        {isLoading ? <ActivityIndicator /> : searchQuery==""? <View>{showGameList()}</View>: <View>{showSearhcedList()}</View>}
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : searchQuery == "" ? (
+          <View>{showGameList()}</View>
+        ) : (
+          <View>{showSearhcedList()}</View>
+        )}
       </ScrollView>
     </View>
   );
