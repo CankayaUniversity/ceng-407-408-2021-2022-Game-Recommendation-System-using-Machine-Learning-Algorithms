@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { TextInput } from "react-native-paper";
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { ImageBackground, StyleSheet, TextInput, Text, Button, Image, View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
 import { SquareButton } from "../../Utils/SquareButton";
-
-
+import { StatusBar } from "expo-status-bar";
 
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const image = { uri: "https://media.discordapp.net/attachments/918607256080240711/980187276153851934/bg.jpg" };
     function navigateToRegister() {
         navigation.navigate("Register");
     }
@@ -42,40 +41,68 @@ export const Login = ({ navigation }) => {
     }
 
     return (
-        <KeyboardAvoidingView
-        
-            style={styles.container} 
-        >
-            <View style={styles.view}>
-                <TextInput label="UserName/E-Mail" onChangeText={setEmail}></TextInput>
-                <TextInput label="Password" secureTextEntry onChangeText={setPassword}></TextInput>
-                <View style={styles.button}>
-                    <SquareButton onPress={navigateToRegister} title="Sign-up" size={80} />
-                    <SquareButton onPress={login} title="Login" size={80} />
+            <View style={styles.container}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                
+                <StatusBar style="auto" />
+                <View style={styles.inputView}>
+                  <TextInput style={styles.TextInput} placeholder="E-Mail" label="UserName/E-Mail" onChangeText={setEmail} placeholderTextColor="#003f5c" ></TextInput>
+                
                 </View>
-                <View>
+                <View style={styles.inputView}>
+                   <TextInput style={styles.TextInput} placeholder="Password" label="Password" secureTextEntry onChangeText={setPassword} placeholderTextColor="#003f5c" ></TextInput>
                 </View>
+                  <SquareButton onPress={login} title="LOGIN" style={styles.loginBtn} />
+                <SquareButton onPress={navigateToRegister} title ="SIGN UP" style={styles.loginBtn}/>
+            </ImageBackground>
             </View>
-        </KeyboardAvoidingView>
+
     )
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#ff0000",
-
-    },
-    view: {
-        padding: 20,
-        justifyContent: "center",
-        paddingTop: 20,
-        flex: .36,
-        flexDirection: "column",
-        justifyContent: "space-between"
-    },
-    button: {
-        flexDirection: "row",
-        justifyContent: "center",
-        justifyContent: "space-between",
-    }
+  container: {
+    flex: 1,
+  },
+ 
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  inputView: {
+    backgroundColor: "#FFC0CB",
+    borderRadius: 30,
+    width: "70%",
+    height: 45,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+ 
+  TextInput: {
+    height: 50,
+    flex: 1,
+    padding: 10,
+    marginLeft: 20,
+  },
+ 
+  forgot_button: {
+    height: 30,
+    marginBottom: 30,
+  },
+ 
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    backgroundColor: "#FF1493",
+    
+  },
+  container1: {
+    flex: 1,
+    backgroundColor: "#9d03fc",
+    fontFamily: 'Montserrat',
+    includeFontPadding: 50
+  }
 });

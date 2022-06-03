@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+  ImageBackground,
   View,
+  TextInput,
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
@@ -13,7 +15,7 @@ import { SquareButton } from "../../Utils/SquareButton";
 import "../RegisterPresenter/UserLikedGames";
 import { getGamesDict } from "../../Utils/Utils";
 import Modal from "react-native-modal";
-
+const image = { uri: "https://media.discordapp.net/attachments/918607256080240711/980187276153851934/bg.jpg" };
 export const Homepage = ({ navigation }) => {
   [isLoading, setLoading] = useState(true);
   [gamesList, setGamesList] = useState([]);
@@ -121,7 +123,8 @@ export const Homepage = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
@@ -130,6 +133,7 @@ export const Homepage = ({ navigation }) => {
       <SquareButton
         onPress={navigateToRecommendation}
         title={"Recommendations"}
+        style={styles.loginBtn}
       />
       <Text style={styles.text}>Top 10 Popular Games</Text>
       <ScrollView>
@@ -141,7 +145,8 @@ export const Homepage = ({ navigation }) => {
           <View>{showSearchedList()}</View>
         )}
       </ScrollView>
-    </View>
+      </ImageBackground>
+    // </View>
   );
 };
 const styles = StyleSheet.create({
@@ -150,10 +155,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginBottom: 20,
   },
-
+ 
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20
+  },
   container: {
     flex: 1,
-    backgroundColor: "#ff0000",
+    // backgroundColor: "#ff0000",
     padding: 20,
   },
   card: {
@@ -164,6 +174,16 @@ const styles = StyleSheet.create({
   title: { padding: 16 },
   rating: {
     flexDirection: "row",
+  },
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    backgroundColor: "#FF1493",
+    
   },
   text: {
     padding: 15,

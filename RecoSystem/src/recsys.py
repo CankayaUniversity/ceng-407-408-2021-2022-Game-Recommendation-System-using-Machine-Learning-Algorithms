@@ -34,6 +34,7 @@ def runMF(interactions, n_components=30, loss='warp', k=15, epoch=30, n_jobs=4,i
     x = sparse.csr_matrix(interactions.values)
     model = LightFM(no_components=n_components, loss=loss, k=k)
     model.fit(x, epochs=epoch, num_threads=n_jobs,item_features=item_features,user_features=user_features)
+
     return model
 
 def runMF_for_evaluate(interactions, n_components=30, loss='warp', k=15, epoch=30, n_jobs=4,item_features=None,user_features=None):

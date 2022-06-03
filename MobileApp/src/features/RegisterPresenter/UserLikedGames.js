@@ -11,6 +11,10 @@ import { Rating } from "react-native-ratings";
 import { Card, List, Searchbar } from "react-native-paper";
 import { SquareButton } from "../../Utils/SquareButton";
 import { setGamesDict, getGamesDict } from "../../Utils/Utils.js";
+import { ImageBackground } from "react-native-web";
+const image = {
+  uri: "https://media.discordapp.net/attachments/918607256080240711/980187276153851934/bg.jpg",
+};
 
 export const UserLikedGames = ({ navigation }) => {
   let games = [];
@@ -165,7 +169,7 @@ export const UserLikedGames = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View source={image} style={styles.container}>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
@@ -176,6 +180,7 @@ export const UserLikedGames = ({ navigation }) => {
           title="✓"
           size={40}
           onPress={ratingCompleted}
+          style={styles.loginBtn}
         ></SquareButton>
       </View>
       <ScrollView>
@@ -194,7 +199,8 @@ export const UserLikedGames = ({ navigation }) => {
 const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
   },
 
@@ -203,17 +209,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff0000",
     padding: 20,
   },
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    backgroundColor: "#FF1493",
+  },
   card: {
     backgroundColor: "white",
     marginBottom: 20,
   },
-  cover: { padding: 20, backgroundColor: "white" },
-  title: { padding: 16 },
+  cover: { padding: 0, backgroundColor: "white" },
+  title: { padding: 20 },
   rating: {
     flexDirection: "row",
   },
   cover: { padding: 20, backgroundColor: "white" },
-  title: { padding: 16 },
+  title: { padding: 4 },
   rating: {
     flexDirection: "row",
   },

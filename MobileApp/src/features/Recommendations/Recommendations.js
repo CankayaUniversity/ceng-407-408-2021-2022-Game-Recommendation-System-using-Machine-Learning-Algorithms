@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ImageBackground,
   View,
   StyleSheet,
   ActivityIndicator,
@@ -14,6 +15,7 @@ import { SquareButton } from "../../Utils/SquareButton";
 import "../RegisterPresenter/UserLikedGames";
 import { getGamesDict } from "../../Utils/Utils";
 import Modal from "react-native-modal";
+const image = { uri: "https://media.discordapp.net/attachments/918607256080240711/980187276153851934/bg.jpg" };
 
 export const Recommendations = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
@@ -55,6 +57,7 @@ export const Recommendations = ({ navigation }) => {
   const list = () => {
     return gamesList.map((gameName) => {
       return (
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <TouchableOpacity
           activeOpacity={0.8}
           key={gameName}
@@ -74,6 +77,7 @@ export const Recommendations = ({ navigation }) => {
             <Text style={styles.title}>{gameName}</Text>
           </Card>
         </TouchableOpacity>
+        </ImageBackground>
       );
     });
   };
@@ -83,11 +87,11 @@ export const Recommendations = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={image} style={styles.container}>
       <ScrollView>
         {isLoading ? <ActivityIndicator /> : <View>{list()}</View>}
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -97,7 +101,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginBottom: 20,
   },
-
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  },
   container: {
     flex: 1,
     backgroundColor: "#ff0000",

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Platform, StatusBar } from 'react-native';
-import AppNavigator from './src/features/Navigation';
-import { setGamesDict, getGamesDict } from './src/Utils/Utils';
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, StyleSheet, Platform, StatusBar } from "react-native";
+import AppNavigator from "./src/features/Navigation";
+import { setGamesDict, getGamesDict } from "./src/Utils/Utils";
 export default function App() {
   const [gamesNameList, setGamesNameList] = useState([]);
   const [gamesImageList, setGamesImageList] = useState([]);
@@ -29,7 +29,12 @@ export default function App() {
           const [key, value] = entry;
           gamesLinkList.push(value);
         });
-        setGamesDict(gamesNameList, gamesImageList, gamesDescriptionList, gamesLinkList);
+        setGamesDict(
+          gamesNameList,
+          gamesImageList,
+          gamesDescriptionList,
+          gamesLinkList
+        );
         console.log("Done fetching", gamesNameList.length, "games");
 
         // setGamesList(games);
@@ -39,14 +44,13 @@ export default function App() {
       });
   };
 
-
   useEffect(() => {
     getArticlesFromApi();
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-        <AppNavigator></AppNavigator>
+    <SafeAreaView style={{ flex: 1 }}>
+      <AppNavigator></AppNavigator>
     </SafeAreaView>
   );
 }
