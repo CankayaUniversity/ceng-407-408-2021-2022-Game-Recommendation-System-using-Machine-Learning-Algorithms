@@ -15,7 +15,7 @@ const AppNavigator = () => {
 
     return (
         <NavigationContainer >
-            <Navigator headerShown="false" initialRouteName='UserLikedGames'>
+            <Navigator headerShown="false" initialRouteName='Login'>
                 <Screen styles={styles.container} name="Login" component={Login}></Screen>
                 <Screen name="Register" component={Register}></Screen>
                 <Screen name="Homepage" component={Homepage}></Screen>
