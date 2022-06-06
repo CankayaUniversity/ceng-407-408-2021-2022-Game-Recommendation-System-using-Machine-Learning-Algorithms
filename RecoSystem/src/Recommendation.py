@@ -1,3 +1,7 @@
+import os
+from calendar import calendar
+from datetime import date
+
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
 from src.recsys import *
@@ -5,6 +9,28 @@ import pandas as pd
 from lightfm.evaluation import precision_at_k
 from lightfm.evaluation import auc_score
 from lightfm.cross_validation import random_train_test_split
+
+done = False
+
+
+def scheduler(interactions):
+    global done
+    today = date.today()
+    f = open("last_saved_model_date.txt", "a")
+    if calendar.day_name[today.weekday()] == "Tuesday":
+        done = False
+    if os.path.getsize("last_saved_model.txt") == 0:
+        f.write(calendar.day_name[today.weekday()])
+        runMF(interactions=interactions,
+              n_components=30,
+              loss='warp',
+              epoch=30,
+              n_jobs=4)
+        return
+    if calendar.day_name[today.weekday()] == "Monday" and not done:
+        f.truncate(0)
+        f.write(calendar.day_name[today.weekday()])
+        done = True
 
 
 def get_recommendations(user_id, liked_games, age, gender):
@@ -18,6 +44,7 @@ def get_recommendations(user_id, liked_games, age, gender):
                                              user_col='user_id',
                                              item_col='appid',
                                              rating_col='rating')
+    scheduler(interactions)
     csr_interactions = sparse.csr_matrix(interactions.values)
     X_train, X_test = random_train_test_split(interactions=csr_interactions, test_percentage=0.2, random_state=None)
 
@@ -45,14 +72,7 @@ def get_recommendations(user_id, liked_games, age, gender):
                                  name_col='name')
 
     # y = sparse.csr_matrix(age_interactions.values)
-    mf_model = runMF(interactions=interactions,
-                     n_components=30,
-                     loss='warp',
-                     epoch=30,
-                     n_jobs=4,
-                     # item_features=y,          # Use here if you want to use lightfm version of age including
-                     # user_features=y
-                     )
+    mf_model = get_model()
 
     mf_model_for_evaluate = runMF_for_evaluate(interactions=X_train,
                                                n_components=30,
@@ -153,8 +173,7 @@ def get_recommendations(user_id, liked_games, age, gender):
                                    id_col='user_id',
                                    name_col='gender')
 
-    rec_to_send = sample_recommendation_user(model=mf_model,
-                                             interactions=interactions,
+    rec_to_send = sample_recommendation_user(interactions=interactions,
                                              user_id=user_id,
                                              user_dict=user_dict,
                                              item_dict=game_dict,
@@ -163,14 +182,14 @@ def get_recommendations(user_id, liked_games, age, gender):
                                              show=True)
     print(rec_to_send)
 
-    rec_to_send_age = sample_recommendation_user(model=mf_model_age,
-                                                 interactions=interactions,
-                                                 user_id=user_id,
-                                                 user_dict=user_dict,
-                                                 item_dict=game_dict,
-                                                 threshold=0,
-                                                 nrec_items=5,
-                                                 show=True)
+    rec_to_send_age = sample_recommendation_user(
+        interactions=interactions,
+        user_id=user_id,
+        user_dict=user_dict,
+        item_dict=game_dict,
+        threshold=0,
+        nrec_items=5,
+        show=True)
     print(rec_to_send_age)
 
     return rec_to_send
