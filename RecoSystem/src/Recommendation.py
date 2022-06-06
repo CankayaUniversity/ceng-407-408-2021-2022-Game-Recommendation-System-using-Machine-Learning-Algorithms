@@ -1,6 +1,6 @@
 import os
 from calendar import calendar
-from datetime import date
+from datetime import datetime, date
 
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
@@ -16,20 +16,25 @@ done = False
 def scheduler(interactions):
     global done
     today = date.today()
-    f = open("last_saved_model_date.txt", "a")
-    if calendar.day_name[today.weekday()] == "Tuesday":
+    f = open("..\\Flask\\/last_saved_model_date.txt", "a")
+    if datetime.today().strftime('%A') == "Tuesday":
         done = False
-    if os.path.getsize("last_saved_model.txt") == 0:
-        f.write(calendar.day_name[today.weekday()])
+    if os.path.getsize("..\\Flask\\/last_saved_model_date.txt") == 0:
+        f.write(datetime.today().strftime('%A'))
         runMF(interactions=interactions,
               n_components=30,
               loss='warp',
               epoch=30,
               n_jobs=4)
         return
-    if calendar.day_name[today.weekday()] == "Monday" and not done:
+    if datetime.today().strftime('%A') == "Monday" and not done:
         f.truncate(0)
-        f.write(calendar.day_name[today.weekday()])
+        f.write(datetime.today().strftime('%A'))
+        runMF(interactions=interactions,
+              n_components=30,
+              loss='warp',
+              epoch=30,
+              n_jobs=4)
         done = True
 
 
