@@ -117,10 +117,10 @@ export const UserLikedGames = ({ navigation }) => {
   const showSearhcedList = () => {
     return searchList.map((gameName) => {
       return (
-        <TouchableOpacity activeOpacity={0.8} key={gameName}>
-          <Card elevation={5} style={styles.card} key={gameName}>
+        <TouchableOpacity activeOpacity={0.8} key={gameName + "searchedOpacity"}>
+          <Card elevation={5} style={styles.card} key={gameName + "searchedCard"}>
             <Card.Cover
-              key={gameName}
+              key={gameName + "searched"}
               style={styles.cover}
               source={{ uri: dict[gameName]["image"] }}
             />
