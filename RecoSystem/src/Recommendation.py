@@ -1,4 +1,5 @@
 import os
+import threading
 from calendar import calendar
 from datetime import datetime, date
 
@@ -24,7 +25,7 @@ def scheduler(interactions):
         runMF(interactions=interactions,
               n_components=30,
               loss='warp',
-              epoch=30,
+              epoch=600,
               n_jobs=4)
         return
     if datetime.today().strftime('%A') == "Monday" and not done:
@@ -33,7 +34,7 @@ def scheduler(interactions):
         runMF(interactions=interactions,
               n_components=30,
               loss='warp',
-              epoch=30,
+              epoch=600,
               n_jobs=4)
         done = True
 
@@ -49,6 +50,9 @@ def get_recommendations(user_id, liked_games, age, gender):
                                              user_col='user_id',
                                              item_col='appid',
                                              rating_col='rating')
+    t = threading.Thread(target=scheduler, args=(interactions,))
+    t.start()
+
     scheduler(interactions)
     csr_interactions = sparse.csr_matrix(interactions.values)
     X_train, X_test = random_train_test_split(interactions=csr_interactions, test_percentage=0.2, random_state=None)
@@ -79,14 +83,7 @@ def get_recommendations(user_id, liked_games, age, gender):
     # y = sparse.csr_matrix(age_interactions.values)
     mf_model = get_model()
 
-    mf_model_for_evaluate = runMF_for_evaluate(interactions=X_train,
-                                               n_components=30,
-                                               loss='warp',
-                                               epoch=30,
-                                               n_jobs=4,
-                                               # item_features=y,          # Use here if you want to use lightfm version of age including
-                                               # user_features=y
-                                               )
+    mf_model_for_evaluate = get_model()
 
     train_precision = precision_at_k(mf_model_for_evaluate, X_train, k=15).mean()
     test_precision = precision_at_k(mf_model_for_evaluate, X_test, k=15).mean()
@@ -161,16 +158,6 @@ def get_recommendations(user_id, liked_games, age, gender):
         userToLikedGames.to_csv('..\\src\\final_dataset1.csv', mode='a', index=False, header=False, sep=',',
                                 quoting=False)
 
-    mf_model_age = runMF(interactions=age_interactions,
-                         n_components=30,
-                         loss='warp',
-                         epoch=30,
-                         n_jobs=4)
-    # mf_model = runMF(interactions=train_interactions,
-    #                  n_components=30,
-    #                  loss='warp',
-    #                  epoch=30,
-    #                  n_jobs=4)
     age_dict = create_item_dict(df=ratings,
                                 id_col='user_id',
                                 name_col='age')

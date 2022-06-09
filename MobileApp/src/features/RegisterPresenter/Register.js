@@ -19,7 +19,7 @@ export const Register = ({ navigation }) => {
   const [password, setPassword] = useState(null);
   const [retypedPassword, setRetypedPassword] = useState(null);
   const [age, setAge] = useState(null);
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState("m");
   const image = {
     uri: "https://media.discordapp.net/attachments/918607256080240711/980187276153851934/bg.jpg",
   };
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
 
   TextInput: {
     height: 50,
+    flex:1
   },
 
   forgot_button: {

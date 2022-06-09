@@ -46,17 +46,22 @@ def get_model():
     return pickle.load(open("finalized_model.sav", 'rb'))
 
 
+def get_evaluate_model():
+    return pickle.load(open("finalized_model_evaluated.sav", 'rb'))
+
+
 def runMF_for_evaluate(interactions, n_components=30, loss='warp', k=15, epoch=30, n_jobs=4, item_features=None,
                        user_features=None):
     # x = sparse.csr_matrix(interactions.values)
     model = LightFM(no_components=n_components, loss=loss, k=k)
     model.fit(interactions, epochs=epoch, num_threads=n_jobs, item_features=item_features, user_features=user_features)
+    pickle.dump(model, open("finalized_model_evaluated.sav", 'wb'))
     return model
 
 
 def sample_recommendation_user(interactions, user_id, user_dict,
                                item_dict, threshold=0, nrec_items=10, show=True):
-    model = pickle.load(open("finalized_model.sav", 'rb'))
+    model = get_model()
     n_users, n_items = interactions.shape
     user_x = user_dict[user_id]
     scores = pd.Series(model.predict(user_x, np.arange(n_items)))

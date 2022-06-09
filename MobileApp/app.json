@@ -3,9 +3,9 @@
     "name": "Game Recommendation",
     "android":{"softwareKeyboardLayoutMode": "pan"},
     "slug": "MobileApp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/init_icon.png",
+    "icon": "./assets/init-icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
