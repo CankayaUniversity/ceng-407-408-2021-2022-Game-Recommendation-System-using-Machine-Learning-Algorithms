@@ -20,7 +20,7 @@ app = Flask(__name__)
 global user, recommended_games
 
 app.config['SESSION_TYPE'] = 'memcached'
-app.config['SECRET_KEY'] = 'super secret key'
+app.config['SECRET_KEY'] = session['localId']
 sess = Session()
 
 

@@ -91,7 +91,7 @@ def get_recommendations(user_id, liked_games, age, gender):
     train_auc = auc_score(mf_model_for_evaluate, X_train).mean()
     test_auc = auc_score(mf_model_for_evaluate, X_test).mean()
     print('Collaborative filtering test AUC: %s' % train_precision)
-    print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
+    print('Accuracy: train %.2f, test %.2f.' % (train_precision, test_precision))
     print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
     name_set = []
     rating_set = []
