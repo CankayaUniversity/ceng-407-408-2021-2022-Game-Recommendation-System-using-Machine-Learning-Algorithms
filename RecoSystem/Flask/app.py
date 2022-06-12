@@ -20,8 +20,12 @@ app = Flask(__name__)
 global user, recommended_games
 
 app.config['SESSION_TYPE'] = 'memcached'
-app.config['SECRET_KEY'] = session['localId']
+
 sess = Session()
+
+
+def authorize_user(user_id):
+    app.config['SECRET_KEY'] = user_id
 
 
 def register_user(email, password):
@@ -36,6 +40,7 @@ def login_user(email, password):
     password = password
 
     user = auth.sign_in_with_email_and_password(email=email, password=password)
+
     print("Logined user id: ", user["localId"])
     return user
 
@@ -45,11 +50,15 @@ def register():
     if request.method == 'POST':
         email = request.json['email']
         password = request.json['password']
-        session["age"] = request.json['age']
-        session["gender"] = request.json['gender']
+        age = request.json['age']
+        gender = request.json['gender']
         print("email = ", email, '\n', "password =", password)
         try:
-            session["user"] = register_user(email, password)
+            user = register_user(email, password)
+            authorize_user(user['localId'])
+            session["user"] = user['localId']
+            session["age"] = age
+            session["gender"] = gender
             return 'succes', 200
         except:
             return 'bad request', 400
@@ -63,7 +72,9 @@ def login():
         password = request.json["password"]
         session["liked_games_list"] = {}
         try:
-            session["user"] = login_user(email, password)
+            user = login_user(email, password)
+
+            session["user"] = user
             return "Succes", 200
         except:
             return "Bad request", 400
